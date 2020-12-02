@@ -176,6 +176,12 @@ $(BUILD_DIR):
 	mkdir $@
 
 #######################################
+# Program the board - Toggle Boot0
+#######################################
+board:
+	st-flash --format ihex write $(BUILD_DIR)/*.hex || (echo Command failed $$?. Please make sure pin Boot0 is HIGH and reset the MCU!; exit 1)
+
+#######################################
 # clean up
 #######################################
 clean:
