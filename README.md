@@ -28,9 +28,6 @@ ${GCC_PATH}/arm-none-eabi-gcc --version
 1. ST-LINK software:
 
 	+ Install ST-LINK USB driver [STSW-LINK009](https://www.st.com/en/development-tools/stsw-link009.html)
-Plugin the STLink hardware and you should found a STM32 STLink node in Device Manager page
-
-![Windows 10 ST Link Device](Images/win-stlink-device.png)
 
 	+ Download [OSS STlink Tools](https://github.com/stlink-org/stlink/releases/tag/v1.6.1) and extract into non-space directory path. Example: *E:\01-Hobbies\stlink-1.6.1-x86_64-w64-mingw32*
 
