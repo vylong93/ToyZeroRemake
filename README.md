@@ -24,6 +24,11 @@ ${GCC_PATH}/arm-none-eabi-gcc --version
 # arm-none-eabi-gcc (GNU Arm Embedded Toolchain 9-2020-q2-update) 9.3.1 20200408 (release)
 ```
 
+3. Install other dependencies [dos2unix](https://formulae.brew.sh/formula/dos2unix)
+```
+brew install dos2unix
+```
+
 ### Windows 10
 1. ST-LINK software:
 
