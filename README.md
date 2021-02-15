@@ -1,4 +1,4 @@
-# Blluepill (STM32F103C8T6) Blinking LED
+# Blluepill (STM32F103C8T6) ToyZeroRemake
 
 ## Board diagram
 ![Bluepill Pin Diagram](Images/Bluepill-Pin-Details.png)
