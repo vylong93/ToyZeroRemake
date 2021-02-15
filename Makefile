@@ -178,8 +178,16 @@ $(BUILD_DIR):
 #######################################
 # Program the board - Toggle Boot0
 #######################################
+# The st-link programmer bin path can be either defined in make command via ST_PROG_PATH variable (> make ST_PROG_PATH=xxx)
+# either it can be added to the PATH environment variable.
+ifdef ST_PROG_PATH
+ST_PROG = $(ST_PROG_PATH)/st-flash
+else
+ST_PROG = st-flash
+endif
+
 board:
-	st-flash --format ihex write $(BUILD_DIR)/*.hex || (echo Command failed $$?. Please make sure pin Boot0 is HIGH and reset the MCU!; exit 1)
+	$(ST_PROG) --format ihex write $(BUILD_DIR)/$(TARGET).hex || (echo Command failed $$?. Please make sure pin Boot0 is HIGH and reset the MCU!; exit 1)
 
 #######################################
 # clean up
