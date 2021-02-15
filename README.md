@@ -17,7 +17,7 @@ brew install stlink
 st-info --version
 # v1.6.1
 ```
-1. Install [GNU Arm Embedded Toolchain](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads) into `GCC_PATH`
+2. Install [GNU Arm Embedded Toolchain](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads) into `GCC_PATH`
 ```
 ${GCC_PATH}/arm-none-eabi-gcc --version
 # arm-none-eabi-gcc (GNU Arm Embedded Toolchain 9-2020-q2-update) 9.3.1 20200408 (release)
