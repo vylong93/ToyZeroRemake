@@ -22,6 +22,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "ws2812b_driver.h"
 
 /* USER CODE END Includes */
 
@@ -89,6 +90,7 @@ int main(void)
   MX_GPIO_Init();
   MX_SPI2_Init();
   /* USER CODE BEGIN 2 */
+  testLedStrip();
 
   /* USER CODE END 2 */
 
