@@ -60,6 +60,8 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define LED_Pin GPIO_PIN_13
 #define LED_GPIO_Port GPIOC
+#define SW_WS2812B_Pin GPIO_PIN_14
+#define SW_WS2812B_GPIO_Port GPIOB
 #define WS2812B_Pin GPIO_PIN_15
 #define WS2812B_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
