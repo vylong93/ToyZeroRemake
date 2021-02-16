@@ -15,8 +15,8 @@
 
 extern SPI_HandleTypeDef hspi2; /* main.c */
 
-static rgbled_t g_ledstrip[NUM_LEDS] = {{0, 0, 0}};
-static uint8_t g_ledstripData[LEDSTRIP_DATA_LENGTH] = {0};
+static rgbled_t g_ledstripColor[NUM_LEDS] = {{0, 0, 0}};
+static uint8_t g_ledstripFrameBuffer[LEDSTRIP_DATA_LENGTH] = {0};
 
 /**
   * @brief  Set one LED color in the strip
@@ -28,9 +28,9 @@ static uint8_t g_ledstripData[LEDSTRIP_DATA_LENGTH] = {0};
   */
 void setLedStripColor(uint8_t i, uint8_t r, uint8_t g, uint8_t b) {
   if (i < NUM_LEDS) {
-    g_ledstrip[i].red = r;
-    g_ledstrip[i].green = g;
-    g_ledstrip[i].blue = b;
+    g_ledstripColor[i].red = r;
+    g_ledstripColor[i].green = g;
+    g_ledstripColor[i].blue = b;
     // TODO: fuse with global brightness value
 
     uint32_t ui32Mask = 0;
@@ -42,7 +42,7 @@ void setLedStripColor(uint8_t i, uint8_t r, uint8_t g, uint8_t b) {
     for (int b = (ui32BitLength - 1); b >= 0; b--) {
         ui32Mask = 1 << b;
         ui32dataIndex = i * NUM_COLOR * COLOR_BIT_LENGTH + (ui32BitLength - 1 - b);
-        g_ledstripData[ui32dataIndex] = (ui32ColorCode & ui32Mask) ? (CODE_HIGH) : (CODE_LOW);
+        g_ledstripFrameBuffer[ui32dataIndex] = (ui32ColorCode & ui32Mask) ? (CODE_HIGH) : (CODE_LOW);
     }
   } /* else index out of range - simply do nothing */
 }
@@ -67,7 +67,7 @@ void setAllLedStripColor(uint8_t r, uint8_t g, uint8_t b) {
   */
 void showLedStrip(void) {
   __disable_irq(); // Protect critical section below due to timing constraints
-  HAL_SPI_Transmit(&hspi2, (unsigned char *)&g_ledstripData, LEDSTRIP_DATA_LENGTH, 1);
+  HAL_SPI_Transmit(&hspi2, (unsigned char *)&g_ledstripFrameBuffer, LEDSTRIP_DATA_LENGTH, 1);
   __enable_irq();
 }
 
@@ -76,37 +76,37 @@ void showLedStrip(void) {
   * @retval None
   */
 void dummyLedStripData(void) {
-  g_ledstrip[0].green = 0x00;
-  g_ledstrip[0].red = 0x1F;
-  g_ledstrip[0].blue = 0x00;
+  g_ledstripColor[0].green = 0x00;
+  g_ledstripColor[0].red = 0x1F;
+  g_ledstripColor[0].blue = 0x00;
 
-  g_ledstrip[1].green = 0x1F;
-  g_ledstrip[1].red = 0x00;
-  g_ledstrip[1].blue = 0x00;
+  g_ledstripColor[1].green = 0x1F;
+  g_ledstripColor[1].red = 0x00;
+  g_ledstripColor[1].blue = 0x00;
 
-  g_ledstrip[2].green = 0x00;
-  g_ledstrip[2].red = 0x00;
-  g_ledstrip[2].blue = 0x1F;
+  g_ledstripColor[2].green = 0x00;
+  g_ledstripColor[2].red = 0x00;
+  g_ledstripColor[2].blue = 0x1F;
 
-  g_ledstrip[3].green = 0x1F;
-  g_ledstrip[3].red = 0x1F;
-  g_ledstrip[3].blue = 0x00;
+  g_ledstripColor[3].green = 0x1F;
+  g_ledstripColor[3].red = 0x1F;
+  g_ledstripColor[3].blue = 0x00;
 
-  g_ledstrip[4].green = 0x1F;
-  g_ledstrip[4].red = 0x00;
-  g_ledstrip[4].blue = 0x1F;
+  g_ledstripColor[4].green = 0x1F;
+  g_ledstripColor[4].red = 0x00;
+  g_ledstripColor[4].blue = 0x1F;
 
-  g_ledstrip[5].green = 0x00;
-  g_ledstrip[5].red = 0x1F;
-  g_ledstrip[5].blue = 0x1F;
+  g_ledstripColor[5].green = 0x00;
+  g_ledstripColor[5].red = 0x1F;
+  g_ledstripColor[5].blue = 0x1F;
 
-  g_ledstrip[6].green = 0x1F;
-  g_ledstrip[6].red = 0x1F;
-  g_ledstrip[6].blue = 0x1F;
+  g_ledstripColor[6].green = 0x1F;
+  g_ledstripColor[6].red = 0x1F;
+  g_ledstripColor[6].blue = 0x1F;
 
-  g_ledstrip[7].green = 0x07;
-  g_ledstrip[7].red = 0x07;
-  g_ledstrip[7].blue = 0x07;
+  g_ledstripColor[7].green = 0x07;
+  g_ledstripColor[7].red = 0x07;
+  g_ledstripColor[7].blue = 0x07;
 
   // WS2812B coding full conversion
   uint8_t* pui8Color = 0;
@@ -116,12 +116,12 @@ void dummyLedStripData(void) {
   for (int iLed = 0; iLed < NUM_LEDS; iLed++) {
     // Scan color
     for (int iColor = 0; iColor < NUM_COLOR; iColor++) {
-      pui8Color = (uint8_t*)g_ledstrip + (iLed * NUM_COLOR + iColor);
+      pui8Color = (uint8_t*)g_ledstripColor + (iLed * NUM_COLOR + iColor);
       // Scan bit
       for (int i = COLOR_BIT_LENGTH - 1; i >= 0; i--) {
         ui32dataIndex = ((iLed * NUM_COLOR) + iColor) * COLOR_BIT_LENGTH + (COLOR_BIT_LENGTH - 1 - i);
         ui8Mask = 1 << i;
-        g_ledstripData[ui32dataIndex] = (*pui8Color & ui8Mask) ? (CODE_HIGH) : (CODE_LOW);
+        g_ledstripFrameBuffer[ui32dataIndex] = (*pui8Color & ui8Mask) ? (CODE_HIGH) : (CODE_LOW);
       }
     }
   }
